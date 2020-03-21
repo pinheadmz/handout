@@ -1,0 +1,28 @@
+{
+  "name": "handout",
+  "version": "1.0.0",
+  "description": "Authoritative nameserver + webserver for Handshake",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinheadmz/handout.git"
+  },
+  "keywords": [
+    "Handshake"
+  ],
+  "author": "Matthew Zipkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinheadmz/handout/issues"
+  },
+  "homepage": "https://github.com/pinheadmz/handout#readme",
+  "dependencies": {
+    "bcfg": "^0.1.6",
+    "blgr": "^0.1.7",
+    "bns": "^0.11.0",
+    "bweb": "^0.1.10"
+  }
+}
