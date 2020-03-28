@@ -214,4 +214,3 @@ fs.writeFileSync(Path.join(__dirname, '..', 'conf', 'hsw-rpc_sendupdate.txt'), J
 
 console.log('\nAll records, hsw-rpc sendupdate format:');
 console.log(JSON.stringify(json));
-
