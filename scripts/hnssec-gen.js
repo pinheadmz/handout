@@ -52,3 +52,12 @@ console.log(
   ds.data.digestType,
   ds.data.digest.toString('hex')
 );
+
+console.log('\nDS record, hsw-rpc sendupdate format:');
+console.log(JSON.stringify({
+  type: 'DS',
+  keyTag: ds.data.keyTag,
+  algorithm: ds.data.algorithm,
+  digestType: ds.data.digestType,
+  digest: ds.data.digest.toString('hex')
+}));
