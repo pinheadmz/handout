@@ -1,45 +1,62 @@
 # Handout
 
-A combination authoritative nameserver and webserver for Handshake.
+A combination authoritative nameserver and webserver for Handshake, with DNSSEC.
 
 ---
 
-These directions assume a Linux platform, especially Ubuntu.
 
+### 1. Install
 
-### 1. Install the necessary dependencies in addition to Node.js:
-
-```
-apt-get install build-essential python libunbound-dev
-```
-
-### 2. Install Node.js
-
-Instructions from: https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
+Follow the [install guide](INSTALL.md) if you need help.
 
 ```
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt-get install -y nodejs
+npm i
 ```
 
-### 3. Install this repo
+### 2. Configure
+
+A built-in script will take your domain name and IP as parameters, and generate
+all the configuration files necessary, including DNSSEC keys. The trailing dot
+is important for your TLD. You can use `127.0.0.1` to test locally.
 
 ```
-git clone https://github.com/pinheadmz/handout
-cd handout
-npm install
+node scripts/hnssec-gen.js examplename. 127.0.0.1
 ```
 
-### 4. Configure the server
-
-Edit the file at `conf/handout.conf` with your server's IP address and your handshake TLD (the trailing dot is important!)
+Output should resemble the following. DNSSEC keys are saved to the `conf/` directory,
+a configuration file `handout.conf` is generated and a backup record set is saved
+at `hsw-rpc_sendupdate.txt`.
 
 ```
-host: 100.200.10.20
-domain: examplename.
+Writing new conf/handout.conf...
+
+DS record for root zone:
+examplename. 172800 IN DS 24620 8 2 297595DC199B947AA8650923619436FBDFD99FD625195111AB4EFE95 0900CADE  ; alg = RSASHA256 ; hash = SHA256
+
+GLUE4 record, Bob format:
+ns.examplename. 127.0.0.1
+
+DS record, Bob format:
+24620 8 2 297595dc199b947aa8650923619436fbdfd99fd625195111ab4efe950900cade
+
+All records, hsw-rpc sendupdate format:
+{"records":[{"type":"GLUE4","ns":"ns.examplename.","address":"127.0.0.1"},{"type":"DS","keyTag":24620,"algorithm":8,"digestType":2,"digest":"297595dc199b947aa8650923619436fbdfd99fd625195111ab4efe950900cade"}]}
 ```
 
-### 5. Run
+### 3. Update your domain on Handshake
+
+The configuration script outputs a complete JSON string for use with hsd rpc calls,
+or as separate strings for use with [Bob](https://github.com/kyokan/bob-wallet).
+These DNS records authorize your nameserver and provide public key hashes for DNSSEC.
+
+```
+hsw-rpc sendupdate examplename \
+'{"records":[{"type":"GLUE4","ns":"ns.examplename.","address":"127.0.0.1"}, \
+{"type":"DS","keyTag":24620,"algorithm":8,"digestType":2, \
+"digest":"297595dc199b947aa8650923619436fbdfd99fd625195111ab4efe950900cade"}]}'
+```
+
+### 4. Run
 
 ```
 node lib/handout.js
@@ -58,23 +75,14 @@ $ node lib/handout.js
 [debug] (webserver) 200.10.100.5 req: /path/to/nowhere.html (404)
 ```
 
-### 6. Update your domain on Handshake
-
-You must add a `GLUE4` record to the resource data for your name on the blockchain:
-
-```
-hsw-rpc sendupdate examplename \
-'{"records":[{ "type": "GLUE4", "ns": "ns.examplename.", "address": "<YOUR IP>"}]}'
-```
-
-### 7. Browse to your website!
+### 5. Browse to your website!
 
 From a computer configured to resolve Handshake domains, you should be able to visit your website at
 
 [http://examplename/](http://examplename/)
 
 
-### 8. Personalize
+### 6. Personalize
 
 Your website's root directory is inside this repo at `html/`. Edit the files in there to build your Handshake website!
 By default only static pages are supported, but the webserver at `lib/webserver.js` can be configured for more dynamic applicaitons.
