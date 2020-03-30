@@ -11,14 +11,14 @@ const fs = require('fs');
 const Path = require('path');
 const {dnssec} = require('bns');
 const {RSASHA256} = dnssec.algs;
-const {ZSK, KSK} = dnssec.keyFlags;
+const {ZONE, KSK} = dnssec.keyFlags;
 
 const kpriv = dnssec.createPrivate(RSASHA256, 2048);
-const kkey = dnssec.makeKey(name, RSASHA256, kpriv, KSK);
+const kkey = dnssec.makeKey(name, RSASHA256, kpriv, ZONE | KSK);
 dnssec.writeKeys(Path.join(__dirname, '..', 'conf', 'ksk'), kkey, kpriv);
 
 const zpriv = dnssec.createPrivate(RSASHA256, 2048);
-const zkey = dnssec.makeKey(name, RSASHA256, zpriv, ZSK);
+const zkey = dnssec.makeKey(name, RSASHA256, zpriv, ZONE);
 dnssec.writeKeys(Path.join(__dirname, '..', 'conf', 'zsk'), zkey, zpriv);
 
 console.log('\nWriting new conf/handout.conf...');
@@ -52,22 +52,24 @@ console.log(
   ds.data.digest.toString('hex')
 );
 
+const json = {
+  records: [
+    {
+      type: 'GLUE4',
+      ns: `ns.${name}`,
+      address: `${host}`
+    },
+    {
+      type: 'DS',
+      keyTag: ds.data.keyTag,
+      algorithm: ds.data.algorithm,
+      digestType: ds.data.digestType,
+      digest: ds.data.digest.toString('hex')
+    }
+  ]
+};
+fs.writeFileSync(Path.join(__dirname, '..', 'conf', 'hsw-rpc_sendupdate.txt'), JSON.stringify(json));
+
 console.log('\nAll records, hsw-rpc sendupdate format:');
-console.log(JSON.stringify(
-  {
-    records: [
-      {
-        type: 'GLUE4',
-        ns: `ns.${name}`,
-        address: `${host}`
-      },
-      {
-        type: 'DS',
-        keyTag: ds.data.keyTag,
-        algorithm: ds.data.algorithm,
-        digestType: ds.data.digestType,
-        digest: ds.data.digest.toString('hex')
-      }
-    ]
-  }
-));
+console.log(JSON.stringify(json));
+
