@@ -58,6 +58,10 @@ hsw-rpc sendupdate examplename \
 
 ### 4. Run
 
+By default the nameserver listens on port `53` (might require sudo) and the webserver
+listens on port `80`. Add the flag `--test` and the nameserver will listen on port `53530`
+instead.
+
 ```
 node lib/handout.js
 ```
