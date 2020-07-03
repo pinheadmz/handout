@@ -16,11 +16,11 @@ npm i
 ### 2. Configure
 
 A built-in script will take your domain name and IP as parameters, and generate
-all the configuration files necessary, including DNSSEC keys. The trailing dot
-is important for your TLD. You can use `127.0.0.1` to test locally.
+all the configuration files necessary, including DNSSEC keys. No trailing dot
+is necessary. You can use `127.0.0.1` to test locally.
 
 ```
-node scripts/hnssec-gen.js examplename. 127.0.0.1
+node scripts/hnssec-gen.js examplename 127.0.0.1
 ```
 
 Output should resemble the following. DNSSEC keys are saved to the `conf/` directory,
