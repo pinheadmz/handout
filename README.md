@@ -1,6 +1,6 @@
 # Handout
 
-A combination authoritative nameserver and webserver for Handshake, with DNSSEC.
+A combination authoritative nameserver and webserver for Handshake, with DNSSEC and DANE.
 
 ---
 
@@ -43,6 +43,8 @@ All records, hsw-rpc sendupdate format:
 {"records":[{"type":"GLUE4","ns":"ns.examplename.","address":"127.0.0.1"},{"type":"DS","keyTag":24620,"algorithm":8,"digestType":2,"digest":"297595dc199b947aa8650923619436fbdfd99fd625195111ab4efe950900cade"}]}
 ```
 
+BACKUP your `conf/` directory at this point! There are private keys in there :-)
+
 ### 3. Update your domain on Handshake
 
 The configuration script outputs a complete JSON string for use with hsd rpc calls,
@@ -83,8 +85,7 @@ $ node lib/handout.js
 
 From a computer configured to resolve Handshake domains, you should be able to visit your website at
 
-[http://examplename/](http://examplename/)
-
+[https://examplename/](https://examplename/)
 
 ### 6. Personalize
 
