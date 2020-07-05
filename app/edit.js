@@ -1,6 +1,6 @@
 'use strict';
 
-class Profile {
+class Edit {
   constructor(domain, name, status) {
     this.domain = domain;
     this.name = name;
@@ -31,8 +31,13 @@ class Profile {
     <div class="row">
       <div class="column"></div>
       <div class="column">
-        <h3>Status:</h3>
-        <div class="status">${this.status}</div>
+        <h3>Update Your Status:</h3>
+          <textarea id="status" style="height:17em" maxlength="500">${this.status}</textarea>
+          <label for="password">Password</label>
+          <input type="password" id="password" style="width:90%;margin-right:5px">
+          <span id="password-ok"></span>
+          <input class="button-primary" type="submit" value="update" id="update" disabled>
+          <div id="response"></div>
       </div>
       <div class="column"></div>
     </div>
@@ -44,10 +49,11 @@ class Profile {
     <a href="about.html">About this website</a>
   </div>
 
+  <script src="js/poc.js"></script>
 </body>
 
     `;
   }
 }
 
-module.exports = Profile;
+module.exports = Edit;

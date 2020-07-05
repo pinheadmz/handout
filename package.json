@@ -21,9 +21,10 @@
   "homepage": "https://github.com/pinheadmz/handout#readme",
   "dependencies": {
     "bcfg": "^0.1.6",
+    "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1",
+    "bdb": "^1.2.2",
     "blgr": "^0.1.7",
     "bns": "^0.11.0",
-    "bweb": "^0.1.10",
-    "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1"
+    "bweb": "^0.1.10"
   }
 }
