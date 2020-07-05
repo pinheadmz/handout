@@ -7,8 +7,8 @@ class Index {
     let h = '';
     for (const item of history) {
       h += `<a href="https://${item.subdomain}.${this.domain}">`;
-      h +=   `<strong>${item.subdomain}.${this.domain}</strong>`;
-      h += `</a>:<br>`;
+      h +=   `<strong>${item.subdomain}.${this.domain}:</strong>`;
+      h += `</a><br>`;
       h += `${item.status}<p>`;
     }
     this.history = h;
