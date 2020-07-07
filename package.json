@@ -22,8 +22,8 @@
   "dependencies": {
     "bcfg": "^0.1.6",
     "blgr": "^0.1.7",
-    "bns": "^0.11.0",
-    "bweb": "^0.1.10",
-    "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1"
+    "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1",
+    "bns": "https://github.com/pinheadmz/bns#cname1",
+    "bweb": "^0.1.10"
   }
 }
