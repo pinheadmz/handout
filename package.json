@@ -24,7 +24,7 @@
     "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1",
     "bdb": "^1.2.2",
     "blgr": "^0.1.7",
-    "bns": "^0.11.0",
+    "bns": "https://github.com/pinheadmz/bns#cname1",
     "bweb": "^0.1.10"
   }
 }
