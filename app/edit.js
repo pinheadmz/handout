@@ -44,6 +44,10 @@ class Edit {
       </div>
       <div class="column"></div>
     </div>
+    <br>
+    <div style="text-align:center">
+      <small>No hate speech of any kind is allowed.<br>Please be nice.</small>
+    </div>
   </div>
   <hr>
 

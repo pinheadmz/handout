@@ -39,6 +39,10 @@ class Profile {
       </div>
       <div class="column"></div>
     </div>
+    <br>
+    <div style="text-align:center">
+      <small>If this is your subdomain, you can <a href="/edit">edit your status.</a></small>
+    </div>
   </div>
   <hr>
 
