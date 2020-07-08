@@ -21,7 +21,7 @@ class Edit {
 
   <div class="header" style="text-align:center">
     <h1>${this.name}</h1>
-    <a href="https://${this.domain}./">
+    <a href="https://${this.domain}/">
       <h3>. Proof Of Concept</h3>
     </a>
   </div>
