@@ -6,10 +6,17 @@ class Index {
 
     let h = '';
     for (const item of history) {
+      let source = '<link rel="stylesheet" href="css/normalize.css">';
+      source += '<link rel="stylesheet" href="css/milligram.css">';
+      source += '<html style="height:100%;width:100%"><body style="height:100%;width:100%">';
+      source += item.status;
+      source += '</body></html>';
+
       h += `<a href="https://${item.subdomain}.${this.domain}">`;
-      h +=   `<strong>${item.subdomain}.${this.domain}:</strong>`;
+      h += `<strong>${item.subdomain}.${this.domain}:</strong>`;
       h += '</a><br>';
-      h += `${item.status}<p>`;
+      h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"
+></iframe><p>`;
     }
     this.history = h;
   }

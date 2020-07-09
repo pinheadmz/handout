@@ -8,6 +8,13 @@ class Profile {
   }
 
   render() {
+    let source = '<link rel="stylesheet" href="css/normalize.css">';
+    source += '<link rel="stylesheet" href="css/milligram.css">';
+    source += '<html style="height:100%;width:100%"><body style="height:100%;width:100%">';
+    source += this.status;
+    source += '</body></html>';
+
+
     return `
 <HTML>
 <head>
@@ -36,7 +43,9 @@ class Profile {
       <div class="column"></div>
       <div class="column">
         <h3>Status:</h3>
-        <div class="status">${this.status}</div>
+        <div class="status">
+          <iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe>
+        </div>
       </div>
       <div class="column"></div>
     </div>
