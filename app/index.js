@@ -15,8 +15,7 @@ class Index {
       h += `<a href="https://${item.subdomain}.${this.domain}">`;
       h += `<strong>${punycode.toUnicode(item.subdomain)}.${this.domain}:</strong>`;
       h += '</a><br>';
-      h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"
-></iframe><p>`;
+      h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
     }
     this.history = h;
   }

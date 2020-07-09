@@ -14,10 +14,12 @@ class POCDB {
     this.layout = {
       // [subdomain] -> PW hash
       P: bdb.key('P', ['ascii']),
-      // [subdomain] -> current status
+      // [subdomain] -> current status -- DEPRECATED
       S: bdb.key('S', ['ascii']),
-      // [timstamp][subdomain] -> historical status
-      H: bdb.key('H', ['uint32', 'ascii'])
+      // [timstamp][subdomain] -> status by timestamp
+      H: bdb.key('H', ['uint32', 'ascii']),
+      // [subdomain][timestamp] -> status by subdomain
+      T: bdb.key('T', ['ascii', 'uint32'])
     };
   }
 
@@ -44,6 +46,25 @@ class POCDB {
     return ret;
   }
 
+  async getSubdomainHistory(subdomain) {
+    const items = await this.db.range({
+      limit: 11,
+      reverse: true,
+      values: true,
+      gte: this.layout.T.min(subdomain),
+      lte: this.layout.T.max(subdomain)
+    });
+
+    const ret = [];
+    for (const item of items) {
+      const [timestamp, subdomain] = this.layout.T.decode(item.key);
+      const status = item.value.toString('utf-8');
+      ret.push({timestamp, subdomain, status});
+    }
+
+    return ret;
+  }
+
   async getStatus(subdomain) {
     const buf = await this.db.get(this.layout.S.encode(subdomain));
 
@@ -59,8 +80,10 @@ class POCDB {
       this.layout.H.encode(timestamp, subdomain),
       Buffer.from(status)
     );
-
-    return this.db.put(this.layout.S.encode(subdomain), Buffer.from(status, 'utf-8'));
+    return this.db.put(
+      this.layout.T.encode(subdomain, timestamp),
+      Buffer.from(status)
+    );
   }
 
   async checkPW(subdomain, password) {

@@ -3,10 +3,26 @@
 const punycode = require('punycode');
 
 class Profile {
-  constructor(domain, name, status) {
+  constructor(domain, name, history) {
     this.domain = domain;
     this.name = name;
-    this.status = status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+
+    let s = '';
+    if (history.length > 0) {
+      const latest = history.shift();
+      s = latest.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+    }
+    this.status = s;
+
+    let h = '';
+    for (const item of history) {
+      let source = '<link rel="stylesheet" href="css/normalize.css">';
+      source += '<link rel="stylesheet" href="css/milligram.css">';
+      source += `<strong>${Date(item.timestamp).toString().split('GMT')[0]}</strong><br>`;
+      source += item.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');;
+      h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
+    }
+    this.history = h;
   }
 
   render() {
@@ -56,6 +72,17 @@ class Profile {
   </div>
   <hr>
 
+  <div class="content container" style="text-align:center">
+    <div class="row">
+      <div class="column"></div>
+      <div class="column">
+        <h2>Previous Updates:</h2>
+        ${this.history}
+      </div>
+      <div class="column"></div>
+    </div>
+  </div>
+  <hr>
 
   <div class="footer" style="padding:10px">
     <a href="about.html">About this website</a>
