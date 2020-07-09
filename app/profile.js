@@ -4,16 +4,13 @@ class Profile {
   constructor(domain, name, status) {
     this.domain = domain;
     this.name = name;
-    this.status = status;
+    this.status = status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
   }
 
   render() {
     let source = '<link rel="stylesheet" href="css/normalize.css">';
     source += '<link rel="stylesheet" href="css/milligram.css">';
-    source += '<html style="height:100%;width:100%"><body style="height:100%;width:100%">';
     source += this.status;
-    source += '</body></html>';
-
 
     return `
 <HTML>
