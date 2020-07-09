@@ -23,6 +23,7 @@ class Profile {
 <body>
 
   <div class="header" style="text-align:center">
+    <br>
     <h1>${this.name}</h1>
     <a href="https://${this.domain}/">
       <h3>. Proof Of Concept</h3>
@@ -47,7 +48,7 @@ class Profile {
   <hr>
 
 
-  <div class="footer">
+  <div class="footer" style="padding:10px">
     <a href="about.html">About this website</a>
   </div>
 

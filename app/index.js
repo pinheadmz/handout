@@ -30,6 +30,7 @@ class Index {
 <body>
 
   <div class="header" style="text-align:center">
+    <br>
     <h1>Proof Of Concept</h1>
     <h3>Use Handshake. &#129309; Make a friend.</h3>
   </div>
@@ -64,7 +65,7 @@ class Index {
     </div>
   </div>
 
-  <div class="footer">
+  <div class="footer" style="padding:10px">
     <a href="about.html">About this website</a>
   </div>
 
