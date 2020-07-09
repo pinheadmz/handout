@@ -18,6 +18,7 @@ class Profile {
     for (const item of history) {
       let source = '<link rel="stylesheet" href="css/normalize.css">';
       source += '<link rel="stylesheet" href="css/milligram.css">';
+      source += '<base target="_parent">';
       source += `<strong>${Date(item.timestamp).toString().split('GMT')[0]}</strong><br>`;
       source += item.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');;
       h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
