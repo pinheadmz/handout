@@ -37,7 +37,7 @@ class POCDB {
     const ret = [];
     for (const item of items) {
       const [timestamp, subdomain] = this.layout.H.decode(item.key);
-      const status = item.value.toString('ascii');
+      const status = item.value.toString('utf-8');
       ret.push({timestamp, subdomain, status});
     }
 
@@ -48,7 +48,7 @@ class POCDB {
     const buf = await this.db.get(this.layout.S.encode(subdomain));
 
     if (buf)
-      return buf.toString('ascii');
+      return buf.toString('utf-8');
     else
       return '';
   }
@@ -60,7 +60,7 @@ class POCDB {
       Buffer.from(status)
     );
 
-    return this.db.put(this.layout.S.encode(subdomain), Buffer.from(status));
+    return this.db.put(this.layout.S.encode(subdomain), Buffer.from(status, 'utf-8'));
   }
 
   async checkPW(subdomain, password) {

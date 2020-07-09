@@ -19,6 +19,7 @@ class Profile {
 <HTML>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/milligram.css">
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
