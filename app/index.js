@@ -1,5 +1,7 @@
 'use strict';
 
+const punycode = require('punycode');
+
 class Index {
   constructor(domain, history) {
     this.domain = domain;
@@ -11,7 +13,7 @@ class Index {
       source += item.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');;
 
       h += `<a href="https://${item.subdomain}.${this.domain}">`;
-      h += `<strong>${item.subdomain}.${this.domain}:</strong>`;
+      h += `<strong>${punycode.toUnicode(item.subdomain)}.${this.domain}:</strong>`;
       h += '</a><br>';
       h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"
 ></iframe><p>`;

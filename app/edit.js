@@ -1,5 +1,7 @@
 'use strict';
 
+const punycode = require('punycode');
+
 class Edit {
   constructor(domain, name, status) {
     this.domain = domain;
@@ -19,13 +21,13 @@ class Edit {
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
-<title>${this.name} . Proof Of Concept</title>
+<title>${punycode.toUnicode(this.name)} . Proof Of Concept</title>
 </head>
 <body>
 
   <div class="header" style="text-align:center">
     <br>
-    <h1>${this.name}</h1>
+    <h1>${punycode.toUnicode(this.name)}</h1>
     <a href="https://${this.domain}/">
       <h3>. Proof Of Concept</h3>
     </a>

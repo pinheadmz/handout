@@ -25,6 +25,7 @@
     "bdb": "^1.2.2",
     "blgr": "^0.1.7",
     "bns": "https://github.com/pinheadmz/bns#cname1",
-    "bweb": "^0.1.10"
+    "bweb": "^0.1.10",
+    "punycode": "^2.1.1"
   }
 }
