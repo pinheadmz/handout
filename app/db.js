@@ -57,7 +57,7 @@ class POCDB {
 
     const ret = [];
     for (const item of items) {
-      const [timestamp, subdomain] = this.layout.T.decode(item.key);
+      const [subdomain, timestamp] = this.layout.T.decode(item.key);
       const status = item.value.toString('utf-8');
       ret.push({timestamp, subdomain, status});
     }
