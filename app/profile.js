@@ -22,7 +22,7 @@ class Profile {
       source += '<base target="_parent">';
       source += `<strong>${d.toString().split('GMT')[0]}</strong><br>`;
       source += item.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');;
-      h += `<iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
+      h += `<iframe style="border:none;max-height:25em;min-height:5em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
     }
     this.history = h;
   }
@@ -63,7 +63,7 @@ class Profile {
       <div class="column">
         <h3>Status:</h3>
         <div class="status">
-          <iframe style="border:none;max-height:25em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe>
+          <iframe style="border:none;max-height:25em;min-height:5em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe>
         </div>
       </div>
       <div class="column"></div>
