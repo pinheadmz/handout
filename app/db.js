@@ -29,7 +29,7 @@ class POCDB {
 
   async getHistory() {
     const items = await this.db.range({
-      limit: 10,
+      limit: 100,
       reverse: true,
       values: true,
       gte: this.layout.H.min(),
@@ -48,7 +48,7 @@ class POCDB {
 
   async getSubdomainHistory(subdomain) {
     const items = await this.db.range({
-      limit: 11,
+      limit: 101,
       reverse: true,
       values: true,
       gte: this.layout.T.min(subdomain),
