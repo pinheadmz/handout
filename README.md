@@ -60,12 +60,12 @@ hsw-rpc sendupdate examplename \
 
 ### 4. Run
 
-By default the nameserver listens on port `53` (might require sudo) and the webserver
-listens on port `80`. Add the flag `--test` and the nameserver will listen on port `53530`
-instead.
+By default the nameserver listens on port `53` (might require sudo) and the HTTPS webserver
+listens on port `443`. Add the flag `--test` and the nameserver will listen on port `53530`
+instead. An extra HTTP (unencrypted) webserver listens on port `80` just to redirect users to the HTTPS website. `sudo` may be required to access low port numbers,other options may be available.
 
 ```
-node lib/handout.js
+sudo node lib/handout.js
 ```
 
 Example logging output, indicating source of each request:
