@@ -1,9 +1,50 @@
 <HTML>
 <head>
-  <title>Handout Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/milligram.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+
+  <title>Funding Handshake Development</title>
 </head>
 <body>
-  <h1>Handout Web + Name Server!</h1>
-  <hr>
-  <a href="about.html">About this website</a>
+  <div class="container">
+
+
+      <div style="text-align: center">
+        <hr style="border: 1px solid white">
+        Donate Bitcoin or Handshake:
+        <br>
+        BTC: bc1qq4hhuusn3m8fzd47w3tjvltvr9klv88rpt6ssq
+        <div>
+          <img src="img/bitcoinlogo.png" height="180px">
+          <img src="img/btc.png">
+        </div>
+        <pre style='text-align:left'>
+          bcoin-cli rpc verifymessage \
+          bc1qq4hhuusn3m8fzd47w3tjvltvr9klv88rpt6ssq \
+          'H4911gemnq1h8LQexOhiaVpjO/qNM13p1EeeXZLs9ANgRZTyaA3TSo6NlNkzUanFgZYonPH0NBuh6p3KyYZXVvk=' \
+          'This is the BTC donation address for Matthew Zipkin (pinheadmz)'
+        </pre>
+        <br><br>
+        <hr style="border: 1px solid white">
+        HNS: hs1qde7jaw6qgzzfu83upn3twvsyhh0zrshg76qe0x
+        <div>
+          <img src="img/hns.png">
+          <img src="img/handshakelogo.png" height="180px">
+        </div>
+        <pre style='text-align:left'>
+          hsd-cli rpc verifymessage \
+          hs1qde7jaw6qgzzfu83upn3twvsyhh0zrshg76qe0x \
+          'px7fX1GEoyxKuTerqLeFEhXgl9lZ8pOyqxyGWoIwSygc8ce4E7SqpKCX0yXgPNXqcCZg+8qFz2OOyl7xLH0x9g==' \
+          'This is the HNS donation address for Matthew Zipkin (pinheadmz)'
+        </pre>
+      </div>
+
+
+  </div>
 </body>
+
+
