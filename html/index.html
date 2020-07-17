@@ -7,6 +7,12 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
+  <style>
+    td {
+
+    }
+  </style>
+
   <title>Funding HNS Development</title>
 </head>
 <body>
@@ -17,22 +23,26 @@
       <h1>Contribute to Handshake development</h1>
       <br>
 
-      <a href="https://github.com/pinheadmz">
-        <h3>
+      <h3>
+        <a href="https://github.com/pinheadmz">
           Engineer: Matthew Zipkin (pinheadmz)
           <img src="img/github.png" style="height:1em;vertical-align:middle">
-        </h3>
-      </a>
+        </a>
+      </h3>
       <br>
 
-      <a href="https://gist.github.com/pinheadmz/96dab51ba9ff9c0b05accd4786f8f7bb">
-        <h3>Review the 12-month development proposal.</h3>
-      </a>
+      <h3>
+        <a href="https://gist.github.com/pinheadmz/96dab51ba9ff9c0b05accd4786f8f7bb">
+          Review the 12-month development proposal.
+        </a>
+      </h3>
       <br>
 
-      <a href="https://github.com/sponsors/pinheadmz">
-        <h3>Donate $USD monthly with GitHub Sponsors</h3>
-      </a>
+      <h3>
+        <a href="https://github.com/sponsors/pinheadmz">
+          Donate $USD monthly with GitHub Sponsors
+        </a>
+      </h3>
     </div>
 
     <div style="text-align: center">
@@ -54,7 +64,75 @@
       </div>
     </div>
 
+    <div id="list" style="max-width:700px;margin:auto"></div>
+
   </div>
 </body>
+
+<script>
+window.onload = function() {
+  const http = new XMLHttpRequest();
+  const url = 'list';
+
+  http.open('get', url, true);
+
+  http.onreadystatechange = function() {
+    if (http.readyState === 4) {
+      if (http.status === 200) {
+        const data = JSON.parse(http.response);
+        let totalbtc = 0;
+        let totalhns = 0;
+        let totalusd = 0;
+
+        let table = `
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>txid</th>
+                <th>BTC</th>
+                <th>HNS</th>
+                <th>USD</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+        for (const item of data) {
+          totalbtc += item.btc ? item.btc : 0;
+          totalhns += item.hns ? item.hns : 0;
+          totalusd += item.usd ? item.usd : 0;
+          table += `
+              <tr>
+                <td>${item.date}</td>
+                <td style="font-family:monospace;min-width:16em;width:16em;word-break:break-word">${item.txid}</td>
+                <td>${item.btc ? item.btc.toFixed(8) : ''}</td>
+                <td>${item.hns ? item.hns.toFixed(6) : ''}</td>
+                <td>$${item.usd.toFixed(2)}</td>
+              </tr>`;
+        }
+
+        table += `
+            <tr>
+              <td></td>
+              <td><strong>TOTALS:</strong></td>
+              <td><strong>${totalbtc.toFixed(8)}</strong></td>
+              <td><strong>${totalhns.toFixed(6)}</strong></td>
+              <td><strong>$${totalusd.toFixed(2)}</strong></td>
+            </tr>`;
+
+        table += `
+            </tbody>
+          </table>`;
+
+        document.getElementById('list').innerHTML = table;
+      } else {
+        console.error(http.response);
+      }
+    }
+  };
+
+  http.send();
+};
+</script>
 
 
