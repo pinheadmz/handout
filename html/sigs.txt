@@ -1,0 +1,34 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+# PGP key E61773CD6E01040E2F1BD78CE7E2984B6289C93A for pinheadmz is available at https://keybase.io/pinheadmz
+# Use a Bitcoin or Handshake client to verify signatures over the addresses on the donation page
+
+bcoin-cli rpc verifymessage \
+bc1qq4hhuusn3m8fzd47w3tjvltvr9klv88rpt6ssq \
+'H4911gemnq1h8LQexOhiaVpjO/qNM13p1EeeXZLs9ANgRZTyaA3TSo6NlNkzUanFgZYonPH0NBuh6p3KyYZXVvk=' \
+'This is the BTC donation address for Matthew Zipkin (pinheadmz)'
+# true
+
+
+hsd-cli rpc verifymessage \
+hs1qde7jaw6qgzzfu83upn3twvsyhh0zrshg76qe0x \
+'px7fX1GEoyxKuTerqLeFEhXgl9lZ8pOyqxyGWoIwSygc8ce4E7SqpKCX0yXgPNXqcCZg+8qFz2OOyl7xLH0x9g==' \
+'This is the HNS donation address for Matthew Zipkin (pinheadmz)'
+# true
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE5hdzzW4BBA4vG9eM5+KYS2KJyToFAl8RsnMACgkQ5+KYS2KJ
+yTqiBxAA2wTJw1yIMbQnmWg1+H3fXfAGumvmgux8Cty2zTT3OZxFjx3MCU0QAi+B
+1ObByK9b43Iq0naZDtvOslsbubVJ2a30NZR83klxmkAzx+dyhoWwFJe0X7ZEBRuH
+0+i7Up8mex+KNLjELSXm3TeXmBj7M+xdUlQ0qy6nZJ5oUMWY2XpqjFF1c5TFXbbh
+5M51rihHsWnpRymgNhirlW82CJUuTkMJYRN3aqx1Y+/kYBWekdOXotUTMj8pDr+z
+BwDhuFk6oxEV7MiepAlkWJVfJ2jXWgbHUINWcDpTqVRVPWfYukZr3ar7dsjjenqK
+iCQu0lT47Rz0/5Hpw5gIiglrmwqKbrydVrbQcL26t10C+yqhIPH3IBhdzK7R2thy
+5YWC6M1csK09QCSpH2iKTVMrYAa0/SrJBYJye+uPUO686DRN+Xfbqv6rjgE6hi7b
+mm8jfb+GAg264Yw4ilxUedQOMWLAKazQOIKzrbHLLP8PMAZecff4+HIdUO2Cdohn
+g4U6j1Fbjc7k19qtm//oZdSaoGlUCjcmtQg6hdWvlcReSqgJNU/k0gIh18nMSDHX
+pINuSRaORgYddQfef1G9aS+ygMfB2/OnSkX2fm3O3ecA4VtNVhDaQJJlcSM96HvA
+tYFCoTNFY0MCaMvhP3Ry1bYGR4i3srevDbiq2LDfTcpp6QHn+9c=
+=w/pm
+-----END PGP SIGNATURE-----
