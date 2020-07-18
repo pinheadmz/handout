@@ -23,6 +23,14 @@
       <h1>Contribute to Handshake development</h1>
       <br>
 
+      <h4>
+        Progress:<br>
+        <span id="grandtotal"></span> of $150,000 total goal (<span id="totalpct"></span>%)
+      </h4>
+      <div id="progress-container" style="height:50px;width:100%;border:2px solid black;border-radius:10px">
+        <div id="progress" style="border-radius:10px;height:100%;background-color:#17cf86;width:0%"></div>
+      </div><br>
+
       <h3>
         <a href="https://github.com/pinheadmz">
           Engineer: Matthew Zipkin (pinheadmz)
@@ -33,7 +41,7 @@
 
       <h3>
         <a href="https://gist.github.com/pinheadmz/96dab51ba9ff9c0b05accd4786f8f7bb">
-          Review the 12-month development proposal.
+          Review the 12-month development proposal
         </a>
       </h3>
       <br>
@@ -43,6 +51,9 @@
           Donate $USD monthly with GitHub Sponsors
         </a>
       </h3>
+
+      <h4>Monthly sponsors pledged:</h4>
+      <div id="sponsors" style="max-width:700px;margin:auto"></div>
     </div>
 
     <div style="text-align: center">
@@ -55,7 +66,6 @@
         <img src="img/bitcoinlogo.png" height="180px">
         <img src="img/btc.png">
       </div>
-
       <hr style="border: 1px solid white">
       HNS: hs1qde7jaw6qgzzfu83upn3twvsyhh0zrshg76qe0x
       <div>
@@ -64,25 +74,41 @@
       </div>
     </div>
 
-    <div id="list" style="max-width:700px;margin:auto"></div>
+    <div style="text-align:center">
+      <h4>Donations received:</h4>
+      <div id="list" style="max-width:700px;margin:auto"></div>
+    </div>
 
   </div>
 </body>
 
 <script>
+let grandtotalusd = 0;
 window.onload = function() {
+  getList();
+  getSponsors();
+}
+
+function updateGrandTotal() {
+  document.getElementById('grandtotal').innerHTML = '$' + grandtotalusd;
+  const pct = ((grandtotalusd / 150000) * 100).toFixed(1);
+  document.getElementById('totalpct').innerHTML = pct;
+  document.getElementById('progress').style.width = pct + '%';
+}
+
+function getList() {
   const http = new XMLHttpRequest();
   const url = 'list';
 
   http.open('get', url, true);
 
   http.onreadystatechange = function() {
+    let totalbtc = 0;
+    let totalhns = 0;
+    let totalusd = 0;
     if (http.readyState === 4) {
       if (http.status === 200) {
         const data = JSON.parse(http.response);
-        let totalbtc = 0;
-        let totalhns = 0;
-        let totalusd = 0;
 
         let table = `
           <table>
@@ -125,6 +151,61 @@ window.onload = function() {
           </table>`;
 
         document.getElementById('list').innerHTML = table;
+        grandtotalusd += parseFloat(totalusd.toFixed(2));
+        updateGrandTotal();
+      } else {
+        console.error(http.response);
+      }
+    }
+  };
+
+  http.send();
+};
+
+function getSponsors() {
+  const http = new XMLHttpRequest();
+  const url = 'sponsors';
+
+  http.open('get', url, true);
+
+  http.onreadystatechange = function() {
+    let totalusd = 0;
+    if (http.readyState === 4) {
+      if (http.status === 200) {
+        const data = JSON.parse(http.response);
+
+        let table = `
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Tier</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+        for (const item of data) {
+          totalusd += item.amount;
+          table += `
+              <tr>
+                <td>${item.name}</td>
+                <td>$${item.amount}</td>
+              </tr>`;
+        }
+
+        table += `
+            <tr>
+              <td><strong>TOTAL:</strong></td>
+              <td><strong>$${totalusd} / Month</strong></td>
+            </tr>`;
+
+        table += `
+            </tbody>
+          </table>`;
+
+        document.getElementById('sponsors').innerHTML = table;
+        grandtotalusd += totalusd * 12;
+        updateGrandTotal();
       } else {
         console.error(http.response);
       }
