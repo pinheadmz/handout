@@ -90,7 +90,7 @@ window.onload = function() {
 }
 
 function updateGrandTotal() {
-  document.getElementById('grandtotal').innerHTML = '$' + grandtotalusd;
+  document.getElementById('grandtotal').innerHTML = '$' + grandtotalusd.toFixed(2);
   const pct = ((grandtotalusd / 150000) * 100).toFixed(1);
   document.getElementById('totalpct').innerHTML = pct;
   document.getElementById('progress').style.width = pct + '%';
