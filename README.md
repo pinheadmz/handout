@@ -92,3 +92,26 @@ From a computer configured to resolve Handshake domains, you should be able to v
 Your website's root directory is inside this repo at `html/`. Edit the files in there to build your Handshake website!
 By default only static pages are supported, but the webserver at `lib/webserver.js` can be configured for more dynamic applicaitons.
 
+## Use your own server
+
+Use handout to generate everything you need to run your own nameserver using BIND9:
+
+- Follow above steps 1, 2 and 3
+- Execute: `node scripts/printzone.js`
+
+This will save a zone file at `conf/examplename.zone`.
+There is an exmple output file in [docs/test.zone](docs/test.zone).
+Check your file with BIND9:
+
+```
+$ named-checkzone test docs/test.zone
+
+zone test/IN: loaded serial 1602942956
+OK
+```
+
+This should be the only file you need to serve your zone with BIND9. Note that
+the handout AuthNS can sign wildcard records on the fly. If you are using subdomains
+this will require extra steps.
+
+
