@@ -22,7 +22,7 @@ class Profile {
       source += '<base target="_parent">';
       source += `<strong>${d.toString().split('GMT')[0]}</strong><br>`;
       source += item.status.replace(/'/g, '&apos;').replace(/"/g, '&quot;');;
-      h += `<iframe style="border:none;max-height:25em;min-height:5em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;"></iframe><p>`;
+      h += `<iframe style="border:none;max-height:25em;min-height:5em;width:100%" srcdoc='${source}' onload="this.height=this.contentWindow.document.body.scrollHeight;" sandbox></iframe><p>`;
     }
     this.history = h;
   }
