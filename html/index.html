@@ -24,7 +24,7 @@
       if (!size) {
         size = 1;
       }
-      const fontSize = 24 / size;
+      const fontSize = 64 / size;
       const d = 26 / size;
       const r = d/2;
 
@@ -55,11 +55,13 @@
       }
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold ' + String(fontSize) + 'px Courier';
-      // ctx.fillText(
-      //   block.hash,
-      //   0,
-      //   (16.7 * d) + offY
-      // );
+      if (block.minago) {
+        ctx.fillText(
+          "#" + block.height + " 0:" + block.minago.toString().padStart(2, "0"),
+          offX,
+          (18 * d) + offY 
+        );
+      }
     }
 
     function clock() {
@@ -78,9 +80,10 @@
             if (minago > 60)
               continue;
 
+            block.minago = minago;
             const degrees = 360 - ((180 + minago * 6) % 360);
             const rads = degrees * (Math.PI / 180);
-            const clockrad = 345;
+            const clockrad = 340;
             const x = Math.floor(clockrad * Math.sin(rads));
             const y = Math.floor(clockrad * Math.cos(rads));
             drawBlock(block, x + clockrad, y + clockrad, 4);
