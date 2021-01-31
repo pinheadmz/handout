@@ -1,9 +1,99 @@
-<HTML>
-<head>
-  <title>Handout Server</title>
-</head>
-<body>
-  <h1>Handout Web + Name Server!</h1>
-  <hr>
-  <a href="about.html">About this website</a>
-</body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background: black;
+        color:#CCCCCC; 
+      }
+      #c1 {
+        background: black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="text-align: center">
+      <canvas id="c1" width="800" height="800"></canvas>
+    </div>
+  <script type="text/javascript">
+    const canvas = document.getElementById('c1');
+    const ctx = canvas.getContext('2d');
+    
+    function drawBlock(block, offX, offY, size) {
+      if (!size) {
+        size = 1;
+      }
+      const fontSize = 24 / size;
+      const d = 26 / size;
+      const r = d/2;
+
+      const hash = block.hash;
+      const color1 = '#' + hash.slice(-6);
+      const color0 = '#' + hash.slice(-12, -6);
+
+      for (let y = 0; y < 16 ; y++) {
+        const row = hash.slice(y * 4, (y * 4) + 4);
+        const bits = parseInt(row, 16).toString(2);
+        const fill = '0000000000000000';
+        const pattern = fill.slice(bits.length) + bits;
+
+        for (let x = 0; x < 16; x++) {
+          const bit = pattern[x];
+          ctx.beginPath();
+          ctx.fillStyle = parseInt(bit) ? color1 : color0;
+          ctx.arc(
+            (x + 1) * d - r + offX,
+            (y + 1) * d - r + offY,
+            r,
+            0,
+            2 * Math.PI
+          );
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold ' + String(fontSize) + 'px Courier';
+      // ctx.fillText(
+      //   block.hash,
+      //   0,
+      //   (16.7 * d) + offY
+      // );
+    }
+
+    function clock() {
+      const http = new XMLHttpRequest();
+      http.open('GET', 'latest', true);
+      // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.onreadystatechange = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (http.readyState === 4) {
+          const ten = JSON.parse(http.response);
+          const now = new Date().getTime() / 1000;
+          drawBlock(ten[0], 180, 180);
+
+          for (const block of ten) {
+            const minago = Math.floor((now - block.time) / 60);
+            if (minago > 60)
+              continue;
+
+            const degrees = 360 - ((180 + minago * 6) % 360);
+            const rads = degrees * (Math.PI / 180);
+            const clockrad = 345;
+            const x = Math.floor(clockrad * Math.sin(rads));
+            const y = Math.floor(clockrad * Math.cos(rads));
+            drawBlock(block, x + clockrad, y + clockrad, 4);
+          }
+          // if (http.status === 200)
+          //   ;
+          // else
+          //   ;
+        }
+      }
+      http.send(null);
+    }
+    setInterval(clock, 1000);
+  </script>
+  </body>
+</html>

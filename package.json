@@ -21,10 +21,13 @@
   "homepage": "https://github.com/pinheadmz/handout#readme",
   "dependencies": {
     "bcfg": "^0.1.6",
+    "bcoin": "github:bcoin-org/bcoin",
     "bcrypto": "https://github.com/pinheadmz/bcrypto#ssl1",
     "blgr": "^0.1.7",
     "bns": "https://github.com/pinheadmz/bns#cname1",
     "bweb": "^0.1.10",
+    "hs-client": "0.0.9",
+    "hsd": "^2.3.0",
     "node-gyp": "^7.0.0"
   }
 }
