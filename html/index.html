@@ -19,7 +19,8 @@
   <script type="text/javascript">
     const canvas = document.getElementById('c1');
     const ctx = canvas.getContext('2d');
-    
+    let latestBlocks = {};
+
     function drawBlock(block, offX, offY, size) {
       if (!size) {
         size = 1;
@@ -55,7 +56,7 @@
       }
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold ' + String(fontSize) + 'px Courier';
-      if (block.minago) {
+      if (block.minago != null) {
         ctx.fillText(
           "#" + block.height + " 0:" + block.minago.toString().padStart(2, "0"),
           offX,
@@ -64,39 +65,62 @@
       }
     }
 
-    function clock() {
-      const http = new XMLHttpRequest();
-      http.open('GET', 'latest', true);
-      // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      http.onreadystatechange = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (http.readyState === 4) {
-          const ten = JSON.parse(http.response);
-          const now = new Date().getTime() / 1000;
-          drawBlock(ten[0], 180, 180);
+    function drawClock() {
+      const now = new Date().getTime() / 1000;
 
-          for (const block of ten) {
-            const minago = Math.floor((now - block.time) / 60);
-            if (minago > 60)
-              continue;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            block.minago = minago;
-            const degrees = 360 - ((180 + minago * 6) % 360);
-            const rads = degrees * (Math.PI / 180);
-            const clockrad = 340;
-            const x = Math.floor(clockrad * Math.sin(rads));
-            const y = Math.floor(clockrad * Math.cos(rads));
-            drawBlock(block, x + clockrad, y + clockrad, 4);
-          }
-          // if (http.status === 200)
-          //   ;
-          // else
-          //   ;
-        }
+      for (const height of Object.keys(latestBlocks)) {
+        const block = latestBlocks[height];
+        const minago = Math.max(Math.floor((now - block.recvtime) / 60), 0);
+        if (minago > 60)
+          continue;
+
+        block.minago = minago;
+        const degrees = 360 - ((180 + minago * 6) % 360);
+        const rads = degrees * (Math.PI / 180);
+        const clockrad = 340;
+        const x = Math.floor(clockrad * Math.sin(rads));
+        const y = Math.floor(clockrad * Math.cos(rads));
+        drawBlock(block, x + clockrad, y + clockrad, 4);
       }
-      http.send(null);
     }
-    setInterval(clock, 1000);
+
+    const socket = new WebSocket('wss://localhost');
+    socket.addEventListener('message', (event) => {
+      const data = event.data;
+      // event type = MESSAGE
+      if (data[0] !== '4')
+        return;
+      // packet type = EVENT
+      if (data[1] !== '2')
+        return;
+
+      const json = JSON.parse(data.slice(2));
+      
+      if (json[0] = 'blocks') {
+        latestBlocks = json[1];
+        drawClock();
+      }
+    });
+
+    const http = new XMLHttpRequest();
+    http.open('GET', 'blocks.json', true);
+    http.onreadystatechange = function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (http.readyState === 4) {
+        latestBlocks = JSON.parse(http.response);
+        drawClock();
+
+        // if (http.status === 200)
+        //   ;
+        // else
+        //   ;
+      }
+    }
+    http.send(null);
+
+    setInterval(drawClock, 1000);
   </script>
   </body>
 </html>

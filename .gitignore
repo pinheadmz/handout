@@ -3,3 +3,4 @@ conf/handout.conf
 conf/hsw-rpc_sendupdate.txt
 conf/*.zone
 app/
+html/blocks.json
