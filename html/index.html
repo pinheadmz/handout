@@ -66,13 +66,13 @@
     }
 
     function drawTree() {
-      const len = 60 * ((tip.height % 36) / 36);
-      drawBranches(400, 400, len, 0, 10);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold ' + String(64 / 4) + 'px Courier';
       let interval = tip.height % 36;
       if (interval === 0)
         interval = 36;
+      const len = 60 * (interval / 36);
+      drawBranches(400, 400, len, 0, 10);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold ' + String(64 / 4) + 'px Courier';
       ctx.fillText(
         "" + interval + "/36",
         335,
