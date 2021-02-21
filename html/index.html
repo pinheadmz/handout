@@ -13,179 +13,23 @@
   </head>
 
   <body>
+    <div
+      id="securityWarning"
+      style="width:100%;height:100%;display:none;position:fixed"
+    >
+      <div style="font-family:verdana;background-color:#8a17a6;margin:auto;text-align:center;border-radius:50px;opacity:90%;width:500px;height:400px">
+        <br><br>
+        <h1>You are not browsing Handshake securely!</h1>
+        <h2>
+          Install <a href="https://github.com/buffrr/letsdane">letsdane</a>
+          and browse to <a href="https://hns.blockclock">https://hns.blockclock</a>
+        </h2>
+        Click anywhere to close.
+      </div>
+    </div>
     <div style="text-align: center">
       <canvas id="c1" width="800" height="800"></canvas>
     </div>
-  <script type="text/javascript">
-    const canvas = document.getElementById('c1');
-    const ctx = canvas.getContext('2d');
-    let latestBlocks = {};
-    let tip = {};
-
-    function setTip() {
-      const keys = Object.keys(latestBlocks);
-      const heights = keys.map(x => parseInt(x));
-      const max = Math.max(...heights);
-      tip = latestBlocks[String(max)];
-    }
-
-    function drawBranches(startX, startY, len, angle, branchWidth) {
-      // https://dev.to/lautarolobo/
-      // use-javascript-and-html5-to-code-a-fractal-tree-2n69
-      ctx.lineWidth = branchWidth;
-
-      ctx.beginPath();
-      ctx.save();
-
-      const hash = tip.treeRoot;
-      const color1 = '#' + hash.slice(-6);
-      const color0 = '#' + hash.slice(-12, -6);
-
-      ctx.strokeStyle = color1;
-      ctx.fillStyle = color0;
-
-      ctx.translate(startX, startY);
-      ctx.rotate(angle * Math.PI/180);
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, -len);
-      ctx.stroke();
-
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "rgba(0,0,0,0.8)";
-
-      if (len < 5) {
-        ctx.restore();
-        return;
-      }
-
-      const tweak = (parseInt(hash.slice(0, 2), 16) % 40) + 5;
-      drawBranches(0, -len, len*0.8, angle-tweak, branchWidth*0.8);
-      drawBranches(0, -len, len*0.8, angle+tweak, branchWidth*0.8);
-
-      ctx.restore();
-    }
-
-    function drawTree() {
-      let interval = tip.height % 36;
-      if (interval === 0)
-        interval = 36;
-      const len = 60 * (interval / 36);
-      drawBranches(400, 400, len, 0, 10);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold ' + String(64 / 4) + 'px Courier';
-      ctx.fillText(
-        "" + interval + "/36",
-        335,
-        395 
-      );
-    }
-
-    function drawBlock(block, offX, offY, size) {
-      if (!size) {
-        size = 1;
-      }
-      const fontSize = 64 / size;
-      const d = 26 / size;
-      const r = d/2;
-
-      const hash = block.hash;
-      const color1 = '#' + hash.slice(-6);
-      const color0 = '#' + hash.slice(-12, -6);
-
-      for (let y = 0; y < 16 ; y++) {
-        const row = hash.slice(y * 4, (y * 4) + 4);
-        const bits = parseInt(row, 16).toString(2);
-        const fill = '0000000000000000';
-        const pattern = fill.slice(bits.length) + bits;
-
-        for (let x = 0; x < 16; x++) {
-          const bit = pattern[x];
-
-          ctx.beginPath();
-          ctx.lineWidth = 1;
-          ctx.fillStyle = parseInt(bit) ? color1 : color0;
-          ctx.arc(
-            (x + 1) * d - r + offX,
-            (y + 1) * d - r + offY,
-            r,
-            0,
-            2 * Math.PI
-          );
-          ctx.fill();
-          ctx.stroke();
-        }
-      }
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold ' + String(fontSize) + 'px Courier';
-      if (block.minago != null) {
-        ctx.fillText(
-          "#" + block.height + " 0:" + block.minago.toString().padStart(2, "0"),
-          offX,
-          (18 * d) + offY 
-        );
-      }
-    }
-
-    function drawClock() {
-      const now = new Date().getTime() / 1000;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (const height of Object.keys(latestBlocks)) {
-        const block = latestBlocks[height];
-        const minago = Math.max(Math.floor((now - block.recvtime) / 60), 0);
-        if (minago > 60)
-          continue;
-
-        block.minago = minago;
-        const degrees = 360 - ((180 + minago * 6) % 360);
-        const rads = degrees * (Math.PI / 180);
-        const clockrad = 340;
-        const x = Math.floor(clockrad * Math.sin(rads));
-        const y = Math.floor(clockrad * Math.cos(rads));
-        drawBlock(block, x + clockrad, y + clockrad, 4);
-      }
-
-      drawTree();
-    }
-
-    const socket = new WebSocket('wss://localhost');
-    socket.addEventListener('message', (event) => {
-      const data = event.data;
-      // event type = MESSAGE
-      if (data[0] !== '4')
-        return;
-      // packet type = EVENT
-      if (data[1] !== '2')
-        return;
-
-      const json = JSON.parse(data.slice(2));
-      
-      if (json[0] = 'blocks') {
-        latestBlocks = json[1];
-        setTip();
-        drawClock();
-      }
-    });
-
-    const http = new XMLHttpRequest();
-    http.open('GET', 'blocks.json', true);
-    http.onreadystatechange = function() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (http.readyState === 4) {
-        latestBlocks = JSON.parse(http.response);
-        setTip();
-        drawClock();
-
-        // if (http.status === 200)
-        //   ;
-        // else
-        //   ;
-      }
-    }
-    http.send(null);
-
-    setInterval(drawClock, 1000);
-  </script>
+  <script type="text/javascript" src="blockclock.js"></script>
   </body>
 </html>
