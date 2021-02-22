@@ -85,10 +85,13 @@ function drawHalvening() {
 
   // Create gradient color pattern out of a sequence of the
   // target bits from each of the blocks in history object
+  let border = null;
   const amt = Object.keys(latestBlocks).length;
   for (let i = amt - 1; i >= 0; i--) {
     const bits = latestBlocks[height - i].bits;
     const color = '#' + bits.toString(16).slice(2);
+    if (!border)
+      border = color;
     grd.addColorStop(i / amt, color);
   }
   ctx.fillStyle = grd;
@@ -99,6 +102,15 @@ function drawHalvening() {
   ctx.arc(400, 450, radius, 0, percent * Math.PI);
   ctx.lineTo(400, 450);
   ctx.fill();
+
+  // Outline semicircle
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = border; // first color used in gradient (oldest block)
+  ctx.moveTo(400, 450);
+  ctx.lineTo((400 / 2) + radius, 450);
+  ctx.arc(400, 450, radius, 0, Math.PI);
+  ctx.lineTo(400, 450);
+  ctx.stroke();
 
   // Halvening caption
   ctx.fillStyle = '#ffffff';
@@ -138,8 +150,9 @@ function drawBlock(block, offX, offY, size = 1) {
 
       // Draw bit dot with corresponding color
       ctx.beginPath();
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 0.2;
       ctx.fillStyle = parseInt(bit) ? color1 : color0;
+      ctx.strokeStyle = 'black';
       ctx.arc(
         (x + 1) * d - r + offX,
         (y + 1) * d - r + offY,
