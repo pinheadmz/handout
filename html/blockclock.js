@@ -167,14 +167,14 @@ function drawBlock(block, offX, offY, size = 1) {
 
   // Block caption: height and time since received
   ctx.fillStyle = '#ffffff';
-  ctx.textBaseline = 'middle';
+  ctx.textBaseline = 'bottom';
   ctx.textAlign = 'left';
   ctx.font = 'bold ' + String(fontSize) + 'px Courier';
   if (block.minago != null) {
     ctx.fillText(
       '#' + block.height + ' 0:' + block.minago.toString().padStart(2, '0'),
       offX,
-      (18 * d) + offY
+      (18 * d) + offY + 4
     );
   }
 }
