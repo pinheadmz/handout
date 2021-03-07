@@ -346,6 +346,9 @@ if (window.location.protocol === 'http:') {
   document.onclick = () => {
     modal.style.display = 'none';
   };
+  document.ontouchstart = () => {
+    modal.style.display = 'none';
+  };
 }
 
 // TICK TOCK!
