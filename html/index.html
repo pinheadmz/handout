@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link id="favicon" rel="shortcut icon" type="image/png" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>The Handshake Block Clock</title>
     <style>
       body {
         background: black;
-        color:#CCCCCC; 
+        color:#CCCCCC;
+        font-family: helvetica
       }
       #c1 {
         background: black;
+      }
+      a {
+        color: teal;
       }
     </style>
   </head>
@@ -15,9 +23,20 @@
   <body>
     <div
       id="securityWarning"
-      style="width:100%;height:100%;display:none;position:fixed"
+      style="
+        width:100%;
+        height:100%;
+        display:none;
+        position:fixed"
     >
-      <div style="font-family:Helvetica;background-color:#8a17a6;margin:auto;text-align:center;border-radius:50px;opacity:90%;width:500px;height:400px">
+      <div style="
+        background-color:#480758;
+        margin:auto;text-align:center;
+        border-radius:50px;
+        opacity:90%;
+        width:500px;
+        height:270px;
+        border:1px solid white">
         <br><br>
         <h1>You are not browsing Handshake securely!</h1>
         <h2>
@@ -30,6 +49,90 @@
     <div style="text-align: center">
       <canvas id="c1" width="800" height="800"></canvas>
     </div>
+
+    <div style="
+      width:50%;
+      margin:auto">
+      <div style="text-align: center;">
+        <h1>The Handshake Block Clock</h1>
+      </div>
+
+      <h2> Blocks </h2>
+      Blocks are represented by their hash, expressed in binary. The colors
+      in the image are derived from the hash itself. They are labeled
+      with their height in the blockchain and time since they were received
+      by the server's hsd node. The most recent block hash (chain tip) is also
+      copied into the browser tab's "shortcut icon". Blocks "tick" around the
+      outside of the clock, which represents 60 minutes of recent chain history.
+      The current block hash and its colors are:
+      <div style="text-align:center">
+        <h2><span id="tiphash" style="font-family:monospace;"></span></h2>
+      </div>
+
+      <h2> The Urkel Tree </h2>
+      The Urkel Tree is the data structure that stores the Handshake root zone.
+      It is updated every 36 blocks on mainnet with all the namestate data from
+      the last 36 blocks worth of transactions. The Urkel Tree root hash is
+      committed to each block header. In the image, the tree is represented by
+      a fractal pattern. The size of the tree is derived from the number of blocks
+      passed in the current tree interval from 0 to 36. The color is derived from
+      the tree root hash itself, and the fractal "angle" parameter is also derived
+      from the hash. The current tree root hash, its color and fractal angle are:
+      <div style="text-align:center">
+        <h2><span id="treeroot" style="font-family:monospace;"></span></h2>
+      </div>
+
+      <h2> The Halvening </h2>
+      Currently on mainnet, every new block generates 2,000 HNS for the miners.
+      This value reduces by half every 170,000 blocks (about 3.25 years). The
+      wedge in the lower half of the clock shows this progress by filling up
+      the half-circle. The colors in the wedge are derived from...
+
+      <h2> Difficulty Adjustments </h2>
+      Handshake mining difficulty is adjusted after each block, targeting a
+      block emission rate of 10 minutes (specifically, 144 blocks / day). The
+      difficulty target of each block is committed to in each block's header in
+      a <a href="https://bitcoin.stackexchange.com/questions/2924/how-to-calculate-new-bits-value/2926#2926">compact format.</a>
+      Lower numbers are "harder" and indicate an increase in network hashpower.
+      Because the first byte (ignored by the image) represents an exponent of sorts,
+      there may be a sudden jump in the colors when it rolls over. 
+      The "bits" value of the last 20 blocks and their colors are:
+      <div id="bitslist" style="
+        width:100px;
+        margin:auto;
+        font-family:monospace;">
+      </div>
+
+      <h2> Source Code </h2>
+      Source code for this website is hosted <a href="https://github.com/pinheadmz/handout/tree/blockclock">on GitHub</a>.
+      It is a fork of my <a href="https://github.com/pinheadmz/handout">handout project</a> which
+      runs both a simple nameserver and webserver together to host simple, secure
+      websites on Handshake names.<br>
+      Because the data in the visualizer is only derived from block headers, the
+      server only needs to run hsd in SPV mode, and without a wallet! If I decide
+      to include mempool data in the clock, I will need to upgrade to a Full Node.
+
+     </div>
+
+    <div style="text-align: center">
+      <hr style="border: 1px solid white">
+      <h3>Donate Bitcoin or Handshake:</h3>
+      <a href="sigs.txt"><strong>These addresses are signed</strong></a>
+      <br><br>
+      BTC: bc1qq4hhuusn3m8fzd47w3tjvltvr9klv88rpt6ssq
+      <div>
+        <img src="img/bitcoinlogo.png" height="200px">
+        <img src="img/btc.png">
+      </div>
+      <br><br>
+      HNS: hs1qde7jaw6qgzzfu83upn3twvsyhh0zrshg76qe0x
+      <div>
+        <img src="img/hns.png">
+        <img src="img/handshakelogo.png" height="200px">
+      </div>
+    </div>
+
+
   <script type="text/javascript" src="blockclock.js"></script>
   </body>
 </html>

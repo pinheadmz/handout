@@ -7,7 +7,7 @@ const ctx = canvas.getContext('2d');
 // Initialize with mainnet network parameters
 let params = {treeinterval: 36, halvening: 170000};
 let latestBlocks = {};
-let tip = {};
+const state = {};
 
 /**
  *  DRAW ARTWORK
@@ -23,7 +23,7 @@ function drawBranches(startX, startY, len, angle, branchWidth) {
   ctx.save();
 
   // Get color from last 3 bytes of current block's tree root
-  const hash = tip.treeRoot;
+  const hash = state.tip.treeRoot;
   const color = '#' + hash.slice(-6);
   ctx.strokeStyle = color;
 
@@ -55,10 +55,7 @@ function drawBranches(startX, startY, len, angle, branchWidth) {
 // Initiates recursive fractal branch-drawing
 function drawTree() {
   // Compute percent completion of tree interval and set fractal size
-  let interval = tip.height % params.treeinterval;
-  if (interval === 0)
-    interval = params.treeinterval;
-  const len = 60 * (interval / params.treeinterval);
+  const len = 60 * (state.interval / params.treeinterval);
   drawBranches(400, 400, len, 0, 10);
 
   // Tree caption
@@ -67,7 +64,7 @@ function drawTree() {
   ctx.textAlign = 'center';
   ctx.font = 'bold ' + String(64 / 4) + 'px Courier';
   ctx.fillText(
-    String(interval) + '/' + String(params.treeinterval),
+    String(state.interval) + '/' + String(params.treeinterval),
     400,
     410
   );
@@ -75,7 +72,7 @@ function drawTree() {
 
 // Fills lower semicircle with halvening meter and difficulty progress
 function drawHalvening() {
-  const height = tip.height;
+  const height = state.tip.height;
   const remainder = height % params.halvening;
   const percent = remainder / params.halvening;
   const radius = 250;
@@ -86,13 +83,12 @@ function drawHalvening() {
   // Create gradient color pattern out of a sequence of the
   // target bits from each of the blocks in history object
   let border = null;
-  const amt = Object.keys(latestBlocks).length;
-  for (let i = amt - 1; i >= 0; i--) {
-    const bits = latestBlocks[height - i].bits;
-    const color = '#' + bits.toString(16).slice(2);
+  for (let i = 0; i < state.bits.length; i++) {
+    const hex = state.bits[i];
+    const color = '#' + hex.slice(2);
     if (!border)
       border = color;
-    grd.addColorStop(i / amt, color);
+    grd.addColorStop(i / state.bits.length, color);
   }
   ctx.fillStyle = grd;
 
@@ -126,7 +122,7 @@ function drawHalvening() {
 
 // Draw block using colors derived from its hash
 // and place around the circle based on time since received
-function drawBlock(block, offX, offY, size = 1) {
+function drawBlock(block, offX, offY, size = 1, tip = false) {
   // Compute proportions of 'bit' circles and text
   const fontSize = 64 / size;
   const d = 26 / size;
@@ -136,6 +132,16 @@ function drawBlock(block, offX, offY, size = 1) {
   const hash = block.hash;
   const color1 = '#' + hash.slice(-6);
   const color0 = '#' + hash.slice(-12, -6);
+
+  // If this is the tip, we draw its hash in the favicon too :-)
+  let favicon = null;
+  let favctx = null;
+  if (tip) {
+    favicon = document.createElement('canvas');
+    favicon.width = 16;
+    favicon.height = 16;
+    favctx = favicon.getContext('2d');
+  }
 
   // Draw hash's bits in 32 x 32 grid with two colors
   for (let y = 0; y < 16 ; y++) {
@@ -162,7 +168,19 @@ function drawBlock(block, offX, offY, size = 1) {
       );
       ctx.fill();
       ctx.stroke();
+
+      // favicon
+      if (tip) {
+        favctx.fillStyle = ctx.fillStyle;
+        favctx.fillRect(x, y, x, y);
+      }
     }
+  }
+
+  // insert favicon if this was tip
+  if (tip) {
+    const link = document.getElementById('favicon');
+    link.href = favicon.toDataURL('image/x-icon');
   }
 
   // Block caption: height and time since received
@@ -203,7 +221,10 @@ function drawClock() {
     const clockrad = 340;
     const x = Math.floor(clockrad * Math.sin(rads));
     const y = Math.floor(clockrad * Math.cos(rads));
-    drawBlock(block, x + clockrad, y + clockrad, 4);
+    let tip = false;
+    if (parseInt(height) === state.tip.height)
+      tip = true;
+    drawBlock(block, x + clockrad, y + clockrad, 4, tip);
   }
 
   // Tree fractal is drawn last (foreground)
@@ -219,7 +240,43 @@ function setTip() {
   const keys = Object.keys(latestBlocks);
   const heights = keys.map(x => parseInt(x));
   const max = Math.max(...heights);
-  tip = latestBlocks[String(max)];
+  state.tip = latestBlocks[String(max)];
+  state.interval = state.tip.height % params.treeinterval;
+  if (state.interval === 0)
+    state.interval = params.treeinterval;
+  state.bits = [];
+  const amt = Object.keys(latestBlocks).length;
+  for (let i = amt - 1; i >= 0; i--) {
+    const value = latestBlocks[state.tip.height - i].bits;
+    state.bits.push(value.toString(16));
+  }
+
+  // Fill in explanation text with current data
+  const hash = state.tip.hash;
+  const first = hash.slice(0,-12);
+  const second = hash.slice(-12, -6);
+  const third = hash.slice(-6);
+  document.getElementById('tiphash').innerHTML =
+    `${first}` +
+    `<span style="color:#${second}">${second}</span>` +
+    `<span style="color:#${third}">${third}</span>`;
+
+  const root = state.tip.treeRoot;
+  const angle = root.slice(0, 2);
+  const middle = root.slice(2, -6);
+  const color = root.slice(-6);
+  document.getElementById('treeroot').innerHTML =
+    `<span style="color:black;background-color:white">${angle}</span>` +
+    `${middle}` +
+    `<span style="color:#${color}">${color}</span>`;
+
+  let bitslist = '';
+  for (const bits of state.bits) {
+    bitslist += `<h2><span>${bits.slice(0, 2)}</span>`;
+    bitslist += `<span style="color:#${bits.slice(2)}">`;
+    bitslist += `${bits.slice(2)}</span></h2>`;
+  }
+  document.getElementById('bitslist').innerHTML = bitslist;
 }
 
 /**
