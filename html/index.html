@@ -2,7 +2,7 @@
 <html>
   <head>
     <link id="favicon" rel="shortcut icon" type="image/png" href="favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <meta charset="utf-8">
     <title>The Handshake Block Clock</title>
     <style>
@@ -16,6 +16,9 @@
       }
       a {
         color: teal;
+      }
+      h3 {
+        font-size: 1.5em;
       }
     </style>
   </head>
@@ -51,7 +54,7 @@
     </div>
 
     <div style="
-      width:50%;
+      width:800px;
       margin:auto">
       <div style="text-align: center;">
         <h1>The Handshake Block Clock</h1>
@@ -66,7 +69,7 @@
       outside of the clock, which represents 60 minutes of recent chain history.
       The current block hash and its colors are:
       <div style="text-align:center">
-        <h2><span id="tiphash" style="font-family:monospace;"></span></h2>
+        <h3><span id="tiphash" style="font-family:monospace;"></span></h3>
       </div>
 
       <h2> The Urkel Tree </h2>
@@ -79,7 +82,7 @@
       the tree root hash itself, and the fractal "angle" parameter is also derived
       from the hash. The current tree root hash, its color and fractal angle are:
       <div style="text-align:center">
-        <h2><span id="treeroot" style="font-family:monospace;"></span></h2>
+        <h3><span id="treeroot" style="font-family:monospace;"></span></h3>
       </div>
 
       <h2> The Halvening </h2>
@@ -114,7 +117,10 @@
 
      </div>
 
-    <div style="text-align: center">
+    <div style="
+      width: 800px;
+      margin: auto;
+      text-align: center">
       <hr style="border: 1px solid white">
       <h3>Donate Bitcoin or Handshake:</h3>
       <a href="sigs.txt"><strong>These addresses are signed</strong></a>

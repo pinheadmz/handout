@@ -272,9 +272,9 @@ function setTip() {
 
   let bitslist = '';
   for (const bits of state.bits) {
-    bitslist += `<h2><span>${bits.slice(0, 2)}</span>`;
+    bitslist += `<h3><span>${bits.slice(0, 2)}</span>`;
     bitslist += `<span style="color:#${bits.slice(2)}">`;
-    bitslist += `${bits.slice(2)}</span></h2>`;
+    bitslist += `${bits.slice(2)}</span></h3>`;
   }
   document.getElementById('bitslist').innerHTML = bitslist;
 }
