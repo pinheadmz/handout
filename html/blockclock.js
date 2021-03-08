@@ -326,6 +326,11 @@ function openSocket() {
       drawClock();
     }
   });
+
+  // Keep connection alive with ping
+  setInterval(() => {
+    socket.send('2');
+  }, 15000);
 }
 
 // Download network parameters and initial block state
