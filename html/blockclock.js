@@ -86,8 +86,7 @@ function drawHalvening() {
   for (let i = 0; i < state.bits.length; i++) {
     const hex = state.bits[i];
     const color = '#' + hex.slice(2);
-    if (!border)
-      border = color;
+    border = color;
     grd.addColorStop(i / state.bits.length, color);
   }
   ctx.fillStyle = grd;
@@ -101,7 +100,7 @@ function drawHalvening() {
 
   // Outline semicircle
   ctx.lineWidth = 1;
-  ctx.strokeStyle = border; // first color used in gradient (oldest block)
+  ctx.strokeStyle = border; // last color used in gradient (newest block)
   ctx.moveTo(400, 450);
   ctx.lineTo((400 / 2) + radius, 450);
   ctx.arc(400, 450, radius, 0, Math.PI);
